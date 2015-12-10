@@ -18,101 +18,71 @@ var {
   ActivityIndicatorIOS,
 } = React;
 
-let requestUrl = DataWarehouse.news;
 
 
-// class MainScreen extends React.Component{
-//   constructor(){//ES6 风格
-//     super();
-//     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-//     return {
-//       dataSource: this.ds.cloneWithRows([]),
-//     };
-//   }
-//   componentDidMount(){
-//     //this._fetchData();
-//     this.setState({dataSource:this.ds.cloneWithRows(["Row 1", "Row 2", "Row 3", "Row 4"])});
 
-//   }
-  
-//   _fetchData(){
-//     fetch(requestUrl)
-//       .then(response => response.json())
-//       .then(response => {
-//         console.log(response);
-//         this.setState({
-//           dataSource: this.ds.cloneWithRows(response.stories)
-//         });
-        
-//       }
-//     );//setState之后会自动调用render函数
-//   }
-//   renderRow(rowData, sectionID, rowID) {
-//     console.log(rowData);
-//     return (
-//       <TouchableHighlight  underlayColor='#dddddd'>
-//         <View>
-//            <View style={styles.rowContainer}>
-//              <Image style={styles.thumb} source={require('./img/splash.png')}/>
-//              <View style={styles.textContainer}>
-//               <Text style={styles.title}>{rowData.title}</Text>
-//               <Text style={styles.desc}></Text>
-//              </View>
-//            </View>
-//            <View style={styles.separator}/>
-           
-//         </View>
-//       </TouchableHighlight>       
-
-//     );
-//   }
- 
-//   render() {
-//     console.log('render listview');
-//     return (
-//       <View style={styles.container}>
-//           <ListView
-//             dataSource={this.state.dataSource}
-//             renderRow={this.renderRow.bind(this)}/>
-//       </View> 
-//     );
-//   }
-// };
 class MainScreen extends Component {
  
   constructor(props) {
     super(props);
+
     this.state = {
-      isLoading : true
-    }
-    
-    this.ds = new ListView.DataSource(
-      {rowHasChanged: (r1, r2) => r1.id !== r2.id});
-    this.state = {
-      dataSource: this.ds.cloneWithRows([{images:[]}])
+      currentDay: 0,
+      dataBlob: {},
+      sectionId: [],
+      dataSource: new ListView.DataSource({
+        rowHasChanged: (r1,r2)=>r1 !== r2,
+        sectionHeaderHasChanged: (s1,s2)=>s1!==s2
+      }),
+      loaded: false
     };
   }
   componentDidMount(){
-    this._fetchData();
+    this._fetchData(this.state.currentDay);
     
   }
   
-  _fetchData(){
-    fetch(requestUrl)
+  
+  _fetchData(date){
+    var url = '';
+    if(date===0){//第一次请求数据
+      url = DataWarehouse.news;
+    } else {
+      url += DataWarehouse.before+date;
+    }
+    var tempDataBlob = this.state.dataBlob;
+    var sectionId = this.state.sectionId;
+    var dataBlob = this.state.dataBlob;
+    
+    fetch(url)
       .then(response => response.json())
       .then(response => {
-        console.log(response);
+        var date = response.date;
+        var newDataBlob = {};
+        var newSectionId = sectionId.slice();
+        newSectionId.push(date);
+        
+        dataBlob[date] = response.stories;
+        newDataBlob = JSON.parse(JSON.stringify(dataBlob));
+
+        
+        console.log(newSectionId);
         this.setState({
-          dataSource: this.ds.cloneWithRows(response.stories),
-          isLoading: false
+          currentDay: date,
+          dataBlob: newDataBlob,
+          sectionId: newSectionId,
+          dataSource: this.state.dataSource.cloneWithRowsAndSections(this.state.dataBlob,this.state.sectionId,null),
+          loaded: true
         });
         
-      }
-    );//setState之后会自动调用render函数
+      })
+      
+      
+    
   }
-
+  
   renderRow(rowData, sectionID, rowID) {
-    console.log(rowData);
+    //console.log(rowData);
     return (
       <TouchableHighlight  underlayColor='#dddddd'>
         <View>
@@ -130,20 +100,48 @@ class MainScreen extends Component {
 
     );
   }
- 
+  renderSectionHeader(sectionData,sectionID){
+    console.log(sectionID);
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionText}>{sectionID}</Text>
+      </View>  
+    );
+  }
+  renderFooter(){
+    return (
+      <View>
+        <ActivityIndicatorIOS
+          animating={true}
+          size={'large'} />
+      </View>);
+  }
+  onEndReached(){
+    //listview到达底部，需要继续fetchData
+    //console.log(this.state.currentDay);
+    this._fetchData(this.state.currentDay);
+
+  }
   render() {
+    
     var spinner = <ActivityIndicatorIOS style={styles.centering} hidden='false' size='large'/>;
           
-    if(this.state.isLoading){
+    if(!this.state.loaded){
+      console.log('render spinner');
       return(
-        <View style={styles.container}>spinner</View>
+        <View style={styles.container}>{spinner}</View>
         );
     } else {
+      console.log('render listview');
+      console.log(this.state.dataSource);
       return (
         <View style={styles.container}>
             <ListView
               dataSource={this.state.dataSource}
-              renderRow={this.renderRow.bind(this)}/>
+              renderSectionHeader={this.renderSectionHeader}
+              renderFooter={this.renderFooter}
+              onEndReached={this.onEndReached.bind(this)}
+              renderRow={this.renderRow}/>
           </View> 
       );
     }
@@ -153,7 +151,8 @@ class MainScreen extends Component {
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    
   },
   rowContainer: {
       flexDirection: 'row',
@@ -186,6 +185,16 @@ var styles = StyleSheet.create({
       left: 100,
       top: 200
     },
+    section: {
+      height: 10,
+      backgroundColor: 'blue',
+      flex: 1,
+    },
+    sectionText: {
+      textAlign: 'center',
+      color: '#ffffff',
+      fontSize: 12,
+    }
 });
 
 module.exports = MainScreen;

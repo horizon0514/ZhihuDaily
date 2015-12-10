@@ -66,7 +66,7 @@ var RNZhihuDaily = React.createClass({
       this.setState({
         splashed: true
       });
-    },3000)  
+    },1000)  
   },
   _renderScreen: function(route,navigator){
     return (
