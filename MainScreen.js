@@ -6,6 +6,7 @@
 
 var React = require('react-native');
 var DataWarehouse = require('./DataWarehouse');
+var NavigationBar = require('react-native-navbar');
 
 var {
   StyleSheet,
@@ -15,6 +16,7 @@ var {
   View,
   Image,
   Component,
+  TabBarIOS,
   ActivityIndicatorIOS,
 } = React;
 
@@ -133,16 +135,18 @@ class MainScreen extends Component {
         );
     } else {
       console.log('render listview');
-      console.log(this.state.dataSource);
+      
+
       return (
-        <View style={styles.container}>
-            <ListView
-              dataSource={this.state.dataSource}
-              renderSectionHeader={this.renderSectionHeader}
-              renderFooter={this.renderFooter}
-              onEndReached={this.onEndReached.bind(this)}
-              renderRow={this.renderRow}/>
-          </View> 
+          <View style={styles.container}>
+              <ListView
+                dataSource={this.state.dataSource}
+                renderSectionHeader={this.renderSectionHeader}
+                renderFooter={this.renderFooter}
+                onEndReached={this.onEndReached.bind(this)}
+                renderRow={this.renderRow}/>
+          </View>
+        
       );
     }
   }
