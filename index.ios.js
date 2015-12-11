@@ -7,7 +7,6 @@
 var React = require('react-native');
 var DataWarehouse = require('./DataWarehouse');
 var MainScreen = require('./MainScreen');
-var HTMLWebView = require('react-native-html-webview');
 
 var {
   AppRegistry,
@@ -91,9 +90,9 @@ var RNZhihuDaily = React.createClass({
        return (
         <Navigator
           initialRoute={{name: 'MainScreen', component: MainScreen}}
-          configureScene={() => {
-              return Navigator.SceneConfigs.FloatFromRight;
-          }}
+          // configureScene={() => {
+          //     return Navigator.SceneConfigs.FloatFromRight;
+          // }}
           renderScene={(route, navigator) => {
             
             /*
