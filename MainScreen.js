@@ -7,7 +7,7 @@
 var React = require('react-native');
 var DataWarehouse = require('./DataWarehouse');
 var NavigationBar = require('react-native-navbar');
-
+var StoryView = require('./Story');
 var {
   StyleSheet,
   ListView,
@@ -18,6 +18,7 @@ var {
   Component,
   TabBarIOS,
   ActivityIndicatorIOS,
+  StatusBarIOS,
 } = React;
 
 
@@ -41,6 +42,7 @@ class MainScreen extends Component {
   }
   componentDidMount(){
     this._fetchData(this.state.currentDay);
+    StatusBarIOS.setStyle(1);
     
   }
   
@@ -67,8 +69,6 @@ class MainScreen extends Component {
         dataBlob[date] = response.stories;
         newDataBlob = JSON.parse(JSON.stringify(dataBlob));
 
-        
-        console.log(newSectionId);
         this.setState({
           currentDay: date,
           dataBlob: newDataBlob,
@@ -82,12 +82,20 @@ class MainScreen extends Component {
       
     
   }
+  rowPressed(id){
+    //跳转到story页面
+    this.props.navigator.push({
+      name: '',
+      component: StoryView,
+      passProps: {storyId: id}
+    });
+  }
   
   renderRow(rowData, sectionID, rowID) {
-    //console.log(rowData);
+    console.log(rowData);
     return (
-      <TouchableHighlight  underlayColor='#dddddd'>
-        <View>
+         <TouchableHighlight  onPress={()=>this.rowPressed(rowData.id)} underlayColor='#dddddd'>
+          <View>
            <View style={styles.rowContainer}>
              <Image style={styles.thumb} source={{uri: rowData.images[0]}}/>
              <View style={styles.textContainer}>
@@ -96,17 +104,21 @@ class MainScreen extends Component {
              </View>
            </View>
            <View style={styles.separator}/>
-           
-        </View>
-      </TouchableHighlight>       
+           </View>
+      </TouchableHighlight>     
 
     );
   }
   renderSectionHeader(sectionData,sectionID){
-    console.log(sectionID);
+    //sectionID ＝ 20140101
+    var  dateStr = [sectionID.slice(0,4),'-',sectionID.slice(4,6),'-',sectionID.slice(6)].join('');
+    var dateObj = new Date(dateStr);
+    var month = dateObj.getUTCMonth() + 1;
+    var day = dateObj.getUTCDate();
+    var days = ['星期天','星期一','星期二','星期三','星期四','星期五','星期六'];
     return (
       <View style={styles.section}>
-        <Text style={styles.sectionText}>{sectionID}</Text>
+        <Text style={styles.sectionText}>{month+'月'+day+'日 '+ days[dateObj.getDay()]}</Text>
       </View>  
     );
   }
@@ -129,22 +141,19 @@ class MainScreen extends Component {
     var spinner = <ActivityIndicatorIOS style={styles.centering} hidden='false' size='large'/>;
           
     if(!this.state.loaded){
-      console.log('render spinner');
       return(
         <View style={styles.container}>{spinner}</View>
         );
     } else {
-      console.log('render listview');
-      
-
       return (
           <View style={styles.container}>
+              <View style={styles.header}></View>
               <ListView
                 dataSource={this.state.dataSource}
-                renderSectionHeader={this.renderSectionHeader}
-                renderFooter={this.renderFooter}
+                renderSectionHeader={this.renderSectionHeader.bind(this)}
+                renderFooter={this.renderFooter.bind(this)}
                 onEndReached={this.onEndReached.bind(this)}
-                renderRow={this.renderRow}/>
+                renderRow={this.renderRow.bind(this)}/>
           </View>
         
       );
@@ -157,6 +166,11 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     
+  },
+  header: {
+    height: 20,
+    backgroundColor: '0766C7',
+
   },
   rowContainer: {
       flexDirection: 'row',
@@ -190,14 +204,15 @@ var styles = StyleSheet.create({
       top: 200
     },
     section: {
-      height: 10,
-      backgroundColor: 'blue',
+      height: 30,
+      backgroundColor: '#0766C7',
       flex: 1,
     },
     sectionText: {
-      textAlign: 'center',
       color: '#ffffff',
-      fontSize: 12,
+      marginTop: 10,
+      textAlign: 'center',
+
     }
 });
 
