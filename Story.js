@@ -52,6 +52,7 @@ class Story extends Component{
 		var body = json.body;
 		var image = json.image;
 		var css = json.css[0];
+		var title = json.title;
 		var html = '<!DOCTYPE html><html><head><link rel="stylesheet" type="text/css" href="'
           + css
           + '" /></head><body>' + body
@@ -62,6 +63,8 @@ class Story extends Component{
 			message: '',
 			html: html,
 			image: image,
+			title: title,
+
 		});
 
 	}
@@ -72,10 +75,15 @@ class Story extends Component{
 		if(this.state.loaded){
 			var html = this.state.html;
 			var image = this.state.image;
+			var title = this.state.title;
 			return (
 		    	<ScrollView>		
 			      <View>
-			      	<Image style={styles.headerImg} source={{uri: image}}/>
+			      	<Image style={styles.headerImg} source={{uri: image}}>
+			      		<View style={styles.titleContainer}>
+			      			<Text style={styles.title}>{title}</Text>
+			      		</View>	
+			      	</Image>
 			        <HTMLWebView
 			        	style={styles.content}
 			            html={html}
@@ -106,14 +114,26 @@ var styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
-	
 	headerImg: {
 		//width: 320,
 		height: 200,
 		top: 0,
 		right: 0,
-		left: 0
+		left: 0,
+		flexDirection: 'row',
 	},
+	titleContainer: {
+		flex: 1,
+		padding: 20,
+		alignSelf: 'flex-end',
+	},
+	title: {
+		flex: 1,
+	    fontSize: 18,
+	    fontWeight: '500',
+	    color: 'white',
+	},
+	
 	
 	content: {
 	    flex: 1,
