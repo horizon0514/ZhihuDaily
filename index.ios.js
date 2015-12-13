@@ -7,6 +7,7 @@
 var React = require('react-native');
 var DataWarehouse = require('./DataWarehouse');
 var MainScreen = require('./MainScreen');
+var HTMLWebView = require('react-native-html-webview');
 
 var {
   AppRegistry,
@@ -17,6 +18,7 @@ var {
   Animated,
   Dimensions,
   View,
+  NavigatorIOS,
 } = React;
 
 let requestUrl = DataWarehouse.cover;
@@ -66,7 +68,7 @@ var RNZhihuDaily = React.createClass({
       this.setState({
         splashed: true
       });
-    },3000)  
+    },1000)  
   },
   _renderScreen: function(route,navigator){
     return (
@@ -86,15 +88,28 @@ var RNZhihuDaily = React.createClass({
       text = '';
     }
     if(this.state.splashed){
-      //显示listView
-      return(
+       return (
         <Navigator
-          style={styles.container}
-          initialRoute={{
-            title: '首页'
+          initialRoute={{name: 'MainScreen', component: MainScreen}}
+          configureScene={() => {
+              return Navigator.SceneConfigs.FloatFromRight;
           }}
-          configureScene={() => Navigator.SceneConfigs.FloatFromRight}
-          renderScene={this._renderScreen}
+          renderScene={(route, navigator) => {
+            
+            /*
+            * navigator的使用方法
+            * http://stackoverflow.com/questions/29335523/react-native-custom-navigation-with-navigator-component
+            * 但是又有点不同，必须这样，否则后面navigator传不了props
+            * https://github.com/facebook/react-native/issues/1103
+            *  
+            */
+            if (route.component) {
+              var Component = route.component;
+              return (<View style={{flex: 1}}>
+                        <Component navigator={navigator} route={route} {...route.passProps}/>
+                      </View>);
+            }
+          }}
         />);
 
     } else {
