@@ -37,18 +37,23 @@ class Slider extends Component{
 	_renderPage(data,pageId){
 		console.log(data);
 		return (
-      		<Image
-        		source={{uri: data.image}}
-        		style={styles.page} />
+			<View style={styles.container}>
+	      		<Image
+	        		source={{uri: data.image}}
+	        		style={styles.page}>
+	        	<View style={styles.titleContainer}>	
+	        		<Text style={styles.title}>{data.title}</Text>	
+	        	</View>
+	        	
+	        	</Image>
+	        </View>		
     		);
 	}
 
 	render(){
-		console.log('render slider');
-		console.log(this.props);
 		return (
 			<ViewPager
-		        style={{flex:1,height: 200}}
+		        style={this.props.style}
 		        dataSource={this.state.dataSource}
 		        renderPage={this._renderPage}
 		        isLoop={true}
@@ -58,11 +63,32 @@ class Slider extends Component{
 }
 
 var styles = StyleSheet.create({
+	container: {
+		
+	},
 	page: {
 		height: 200,
 		width: deviceWidth,
+		
 
 	},
+	titleContainer: {
+		flex: 1,
+		padding: 20,
+		
+		
+	},
+  
+	title: {
+	    color: '#ffffff',
+	    fontSize: 20,
+	    fontWeight : 'bold',
+	    position: 'absolute',
+	    bottom: 20,
+	    
+	    //backgroundColor: 'transparent',
+	  }
+  
 	
 });
 

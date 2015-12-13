@@ -157,7 +157,7 @@ class MainScreen extends Component {
     var spinner = <ActivityIndicatorIOS style={styles.centering} hidden='false' size='large'/>;
     var slider = this.state.sliderDataSource? 
                   (<View style={styles.sliderContainer}>
-                    <Slider style={styles.slider} dataSource={this.state.sliderDataSource}/>
+                    <Slider dataSource={this.state.sliderDataSource}/>
                     </View>)
                   :(<View></View>);  
     if(!this.state.loaded){
@@ -169,7 +169,7 @@ class MainScreen extends Component {
           <View style={styles.container}>
               <View style={styles.header}></View>
               {slider}
-              <ListView style={styles.listview}
+              <ListView
                 dataSource={this.state.dataSource}
                 renderSectionHeader={this.renderSectionHeader.bind(this)}
                 renderFooter={this.renderFooter.bind(this)}
@@ -236,17 +236,11 @@ var styles = StyleSheet.create({
 
   },
   sliderContainer:{
-    height: 700,
-    flex: 1,
-    //flexDirection: 'column',
-
+    height: 200,
+    
   },
-  slider:{
-    height: 700,
-  },
-  listview:{
-    marginTop: -150,
-  }
+  
+  
 });
 
 module.exports = MainScreen;
