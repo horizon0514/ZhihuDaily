@@ -20,9 +20,11 @@ var {
   TabBarIOS,
   ActivityIndicatorIOS,
   StatusBarIOS,
+  Dimensions,
 } = React;
 
 
+var deviceWidth = Dimensions.get('window').width;
 
 
 class MainScreen extends Component {
@@ -127,16 +129,38 @@ class MainScreen extends Component {
   }
   renderSectionHeader(sectionData,sectionID){
     //sectionID ＝ 20140101
-    var  dateStr = [sectionID.slice(0,4),'-',sectionID.slice(4,6),'-',sectionID.slice(6)].join('');
+    var dateStr = [sectionID.slice(0,4),'-',sectionID.slice(4,6),'-',sectionID.slice(6)].join('');
     var dateObj = new Date(dateStr);
     var month = dateObj.getUTCMonth() + 1;
     var day = dateObj.getUTCDate();
     var days = ['星期天','星期一','星期二','星期三','星期四','星期五','星期六'];
+
+    //今日热闻
+    var sectionStyle,
+        text;
+    if(dateObj.toDateString()=== new Date().toDateString()){
+      sectionStyle = styles.currentSection;
+      text = '今日要闻';
+    } else {
+      sectionStyle = styles.section;
+      text = month+'月'+day+'日 '+ days[dateObj.getDay()];
+    }
     return (
-      <View style={styles.section}>
-        <Text style={styles.sectionText}>{month+'月'+day+'日 '+ days[dateObj.getDay()]}</Text>
+      <View style={[sectionStyle]}>
+        <Text style={styles.sectionText}>{text}</Text>
       </View>  
     );
+  }
+  _renderHeader(){
+    //listview添加header
+    var slider = this.state.sliderDataSource? 
+                  (<View style={styles.sliderContainer}>
+                    <Slider dataSource={this.state.sliderDataSource}/>
+                    </View>)
+                  :(<View></View>); 
+  
+    return slider;
+   
   }
   renderFooter(){
     return (
@@ -152,14 +176,25 @@ class MainScreen extends Component {
     this._fetchData(this.state.currentDay);
 
   }
+  _onScroll(e){
+    console.log(e.nativeEvent.contentOffset);
+    var {x,y} = e.nativeEvent.contentOffset;
+    // var headerStyle = styles.currentSection;
+    // console.log(headerStyle);
+    return{
+        opacity: 1-y/200
+      };
+
+    
+  }
   render() {
     
     var spinner = <ActivityIndicatorIOS style={styles.centering} hidden='false' size='large'/>;
-    var slider = this.state.sliderDataSource? 
-                  (<View style={styles.sliderContainer}>
-                    <Slider dataSource={this.state.sliderDataSource}/>
-                    </View>)
-                  :(<View></View>);  
+    // var slider = this.state.sliderDataSource? 
+    //               (<View style={styles.sliderContainer}>
+    //                 <Slider dataSource={this.state.sliderDataSource}/>
+    //                 </View>)
+    //               :(<View></View>);  
     if(!this.state.loaded){
       return(
         <View style={styles.container}>{spinner}</View>
@@ -168,13 +203,15 @@ class MainScreen extends Component {
       return (
           <View style={styles.container}>
               <View style={styles.header}></View>
-              {slider}
               <ListView
                 dataSource={this.state.dataSource}
+                renderHeader={this._renderHeader.bind(this)}
                 renderSectionHeader={this.renderSectionHeader.bind(this)}
                 renderFooter={this.renderFooter.bind(this)}
                 onEndReached={this.onEndReached.bind(this)}
-                renderRow={this.renderRow.bind(this)}/>
+                renderRow={this.renderRow.bind(this)}
+                showsVerticalScrollIndicator={false}
+                onScroll={this._onScroll.bind(this)}/>
           </View>
         
       );
@@ -190,7 +227,7 @@ var styles = StyleSheet.create({
   },
   header: {
     height: 20,
-    backgroundColor: '0766C7',
+    backgroundColor: '#0766C7',
 
   },
   rowContainer: {
@@ -229,9 +266,20 @@ var styles = StyleSheet.create({
     backgroundColor: '#0766C7',
     flex: 1,
   },
+  currentSection: {
+    height: 30,
+    backgroundColor: '#0766C7',
+    width: deviceWidth,
+    //marginTop: -200,
+    position: 'absolute',
+    top: 0,
+    opacity: 0,
+    
+  },
   sectionText: {
     color: '#ffffff',
     marginTop: 10,
+    flex: 1,
     textAlign: 'center',
 
   },

@@ -35,7 +35,6 @@ class Slider extends Component{
 	}
 	
 	_renderPage(data,pageId){
-		console.log(data);
 		return (
 			<View style={styles.container}>
 	      		<Image
