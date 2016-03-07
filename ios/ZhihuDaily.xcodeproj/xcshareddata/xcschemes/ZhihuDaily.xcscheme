@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "RNZhihuDaily.app"
-               BlueprintName = "RNZhihuDaily"
-               ReferencedContainer = "container:RNZhihuDaily.xcodeproj">
+               BuildableName = "ZhihuDaily.app"
+               BlueprintName = "ZhihuDaily"
+               ReferencedContainer = "container:ZhihuDaily.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,27 +29,27 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "RNZhihuDailyTests.xctest"
-               BlueprintName = "RNZhihuDailyTests"
-               ReferencedContainer = "container:RNZhihuDaily.xcodeproj">
+               BuildableName = "ZhihuDailyTests.xctest"
+               BlueprintName = "ZhihuDailyTests"
+               ReferencedContainer = "container:ZhihuDaily.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      buildConfiguration = "Debug">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "RNZhihuDailyTests.xctest"
-               BlueprintName = "RNZhihuDailyTests"
-               ReferencedContainer = "container:RNZhihuDaily.xcodeproj">
+               BuildableName = "ZhihuDailyTests.xctest"
+               BlueprintName = "ZhihuDailyTests"
+               ReferencedContainer = "container:ZhihuDaily.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,51 +57,48 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "RNZhihuDaily.app"
-            BlueprintName = "RNZhihuDaily"
-            ReferencedContainer = "container:RNZhihuDaily.xcodeproj">
+            BuildableName = "ZhihuDaily.app"
+            BlueprintName = "ZhihuDaily"
+            ReferencedContainer = "container:ZhihuDaily.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
+      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
-      debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "RNZhihuDaily.app"
-            BlueprintName = "RNZhihuDaily"
-            ReferencedContainer = "container:RNZhihuDaily.xcodeproj">
+            BuildableName = "ZhihuDaily.app"
+            BlueprintName = "ZhihuDaily"
+            ReferencedContainer = "container:ZhihuDaily.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
+      buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "RNZhihuDaily.app"
-            BlueprintName = "RNZhihuDaily"
-            ReferencedContainer = "container:RNZhihuDaily.xcodeproj">
+            BuildableName = "ZhihuDaily.app"
+            BlueprintName = "ZhihuDaily"
+            ReferencedContainer = "container:ZhihuDaily.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

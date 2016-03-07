@@ -1,15 +1,14 @@
 {
-  "name": "RNZhihuDaily",
+  "name": "ZhihuDaily",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "react-native start"
+    "clean:babelrc": "find ./node_modules -name react-packager -prune -o -name '.babelrc' -print | xargs rm -f",
+    "postinstall": "npm run clean:babelrc",
+    "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
-    "react-native": "^0.16.0",
-    "react-native-html-webview": "0.0.17",
-    "react-native-navbar": "^1.1.1",
-    "react-native-refresher": "^0.1.1",
-    "react-native-viewpager": "^0.1.4"
+    "react-native": "^0.21.0",
+    "react-native-viewpager": "^0.2.1"
   }
 }

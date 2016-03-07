@@ -1,7 +1,6 @@
 'use strict';
 var React = require('react-native');
 var dataWarehouse = require('./DataWarehouse');
-var HTMLWebView = require('react-native-html-webview');
 
 var {
 	View,
@@ -12,10 +11,12 @@ var {
 	Component,
 	WebView,
 	ScrollView,
+	Dimensions,
 	Animated,
 	ActivityIndicatorIOS,
 
 } = React;
+var WEBVIEW_REF = 'webview';
 
 class Story extends Component{
 	constructor(props){
@@ -52,11 +53,11 @@ class Story extends Component{
 		var body = json.body;
 		var image = json.image;
 		var css = json.css[0];
-		var html = '<!DOCTYPE html><html><head><link rel="stylesheet" type="text/css" href="'
-          + css
-          + '" /></head><body>' + body
-          + '</body></html>';
 
+		var headImg = '<img src="'+image+'" width="100%" height="200"/>'
+		var html = body.replace('<div class="img-place-holder"></div>',headImg)+'<link href="'+css+'" rel="stylesheet"/>';
+
+        console.log(html);
 		this.setState({
 			loaded: true,
 			message: '',
@@ -68,23 +69,21 @@ class Story extends Component{
 
 	render(){
 		console.log('render story');
-		
+		console.log(this.state.loaded);
 		if(this.state.loaded){
 			var html = this.state.html;
 			var image = this.state.image;
 			return (
-		    	<ScrollView>		
-			      <View>
-			      	<Image style={styles.headerImg} source={{uri: image}}/>
-			        <HTMLWebView
-			        	style={styles.content}
-			            html={html}
-			            autoHeight={true}
-			            scalesPageToFit={true}
+		    	<ScrollView>
+			        <WebView
+			        	  ref={WEBVIEW_REF}
+				          automaticallyAdjustContentInsets={false}
+				          source={{html: html}}
+				          style={styles.webview}
+          				  //contentInset={{top:0,bottom:47}}
+
 			        />
-			       	
-			      </View>
-			    </ScrollView>
+			   	</ScrollView>
 	    	);
 		} else {
 			return (
@@ -105,6 +104,9 @@ var styles = StyleSheet.create({
 		marginTop: 15,
 		alignItems: 'center',
 		justifyContent: 'center'
+	},
+	webview: {
+		height: Dimensions.get('window').height,
 	},
 	
 	headerImg: {

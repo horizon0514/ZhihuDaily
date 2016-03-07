@@ -5,7 +5,7 @@
 
 var React = require('react-native');
 var ViewPager = require('react-native-viewpager');
-
+var StoryView = require('./Story');
 
 
 var {
@@ -14,6 +14,7 @@ var {
 	StyleSheet,
 	Dimensions,
 	Component,
+	TouchableHighlight,
 	Image,
 } = React;
 
@@ -33,19 +34,29 @@ class Slider extends Component{
 			dataSource: this.state.dataSource.cloneWithPages(this.props.dataSource)
 		});
 	}
+
+	_onPress(id){
+		this.props.navigator.push({
+      		name: '',
+      		component: StoryView,
+      		passProps: {storyId: id}
+    	});
+	}
 	
 	_renderPage(data,pageId){
 		return (
-			<View style={styles.container}>
-	      		<Image
-	        		source={{uri: data.image}}
-	        		style={styles.page}>
-	        	<View style={styles.titleContainer}>	
-	        		<Text style={styles.title}>{data.title}</Text>	
-	        	</View>
-	        	
-	        	</Image>
-	        </View>		
+			// <TouchableHighlight onPress=()=>this._onPress(data)>
+				<View style={styles.container}>
+		      		<Image
+		        		source={{uri: data.image}}
+		        		style={styles.page}>
+		        	<View style={styles.titleContainer}>	
+		        		<Text style={styles.title}>{data.title}</Text>	
+		        	</View>
+		        	
+		        	</Image>
+		        </View>
+		    // </TouchableHighlight>    		
     		);
 	}
 
@@ -59,6 +70,7 @@ class Slider extends Component{
 		        autoPlay={true}/>
 		);
 	}
+	
 }
 
 var styles = StyleSheet.create({

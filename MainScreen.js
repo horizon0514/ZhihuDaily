@@ -1,7 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
 
 var React = require('react-native');
@@ -48,7 +44,7 @@ class MainScreen extends Component {
   }
   componentDidMount(){
     this._fetchData(this.state.currentDay);
-    StatusBarIOS.setStyle(1);
+    StatusBarIOS.setStyle('default',true);
     
   }
   
@@ -73,9 +69,13 @@ class MainScreen extends Component {
     var dataBlob = this.state.dataBlob;
     
     fetch(url)
-      .then(response => response.json())
       .then(response => {
-        var date = response.date;
+        console.log(response);
+        return response.json();
+      })
+      .then(response => {
+        console.log(response);
+        let date = response.date;console.log("date="+date);
         //检查是否有topstories
         if(response.top_stories){
           this.state.sliderDataSource = response.top_stories;
@@ -97,6 +97,9 @@ class MainScreen extends Component {
         });
         
       })
+      .catch(err=>{
+        console.log('err'+JSON.stringify(err));
+      });
       
       
     
@@ -129,6 +132,7 @@ class MainScreen extends Component {
   }
   renderSectionHeader(sectionData,sectionID){
     //sectionID ＝ 20140101
+    console.log(sectionID);
     var dateStr = [sectionID.slice(0,4),'-',sectionID.slice(4,6),'-',sectionID.slice(6)].join('');
     var dateObj = new Date(dateStr);
     var month = dateObj.getUTCMonth() + 1;
@@ -172,12 +176,12 @@ class MainScreen extends Component {
   }
   onEndReached(){
     //listview到达底部，需要继续fetchData
-    //console.log(this.state.currentDay);
+    console.log("the end day="+this.state.currentDay);
     this._fetchData(this.state.currentDay);
 
   }
   _onScroll(e){
-    console.log(e.nativeEvent.contentOffset);
+    //console.log(e.nativeEvent.contentOffset);
     var {x,y} = e.nativeEvent.contentOffset;
     // var headerStyle = styles.currentSection;
     // console.log(headerStyle);
@@ -190,11 +194,7 @@ class MainScreen extends Component {
   render() {
     
     var spinner = <ActivityIndicatorIOS style={styles.centering} hidden='false' size='large'/>;
-    // var slider = this.state.sliderDataSource? 
-    //               (<View style={styles.sliderContainer}>
-    //                 <Slider dataSource={this.state.sliderDataSource}/>
-    //                 </View>)
-    //               :(<View></View>);  
+    
     if(!this.state.loaded){
       return(
         <View style={styles.container}>{spinner}</View>

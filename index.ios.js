@@ -7,7 +7,6 @@
 var React = require('react-native');
 var DataWarehouse = require('./DataWarehouse');
 var MainScreen = require('./MainScreen');
-var HTMLWebView = require('react-native-html-webview');
 
 var {
   AppRegistry,
@@ -18,6 +17,7 @@ var {
   Animated,
   Dimensions,
   View,
+  StatusBar,
   NavigatorIOS,
 } = React;
 
@@ -25,7 +25,7 @@ let requestUrl = DataWarehouse.cover;
 let WINDOW_WIDTH = Dimensions.get('window').width;
 
 
-var RNZhihuDaily = React.createClass({
+var ZhihuDaily = React.createClass({
   getInitialState: function(){//ES6 风格
     return {
       cover: null,
@@ -155,4 +155,4 @@ var styles = StyleSheet.create({
   
 });
 
-AppRegistry.registerComponent('RNZhihuDaily', () => RNZhihuDaily);
+AppRegistry.registerComponent('ZhihuDaily', () => ZhihuDaily);
